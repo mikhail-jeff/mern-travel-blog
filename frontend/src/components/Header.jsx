@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 const linksArr = ['home', 'diaries', 'auth'];
 
 const Header = () => {
-	const [value, setValue] = useState();
+	const [value, setValue] = useState(false);
+
 	return (
 		<AppBar sx={{ bgcolor: 'transparent', position: 'sticky' }}>
 			<Toolbar>
@@ -25,10 +26,11 @@ const Header = () => {
 							to={`/${link === 'home' ? '' : link}`}
 							sx={{
 								textDecoration: 'none',
-								':hover': {
-									textDecoration: 'underline',
-									textUnderlineOffset: '18px',
-								},
+								fontWeight: 'bold',
+								// ':hover': {
+								// 	textDecoration: 'underline',
+								// 	textUnderlineOffset: '18px',
+								// },
 							}}
 							key={link}
 							label={link}
