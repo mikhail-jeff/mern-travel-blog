@@ -1,9 +1,12 @@
 import { Button, FormLabel, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
-import { sendAuthrequest } from '../api/api';
+import { useDispatch } from 'react-redux';
+import { sendAuthRequest } from '../api/api';
+import { authActions } from '../store';
 
 const Auth = () => {
+	const dispatch = useDispatch();
 	const [isSignup, setIsSignup] = useState(false);
 	const [inputs, setInputs] = useState({
 		name: '',
@@ -16,12 +19,18 @@ const Auth = () => {
 		console.log(inputs);
 
 		if (isSignup) {
-			sendAuthrequest(true, inputs)
-				.then((data) => console.log(data))
+			sendAuthRequest(true, inputs)
+				.then((data) => localStorage.setItem('userId', data.user._id))
+				.then(() => {
+					dispatch(authActions.login());
+				})
 				.catch((error) => console.log(error));
 		} else {
-			sendAuthrequest(false, inputs)
-				.then((data) => console.log(data))
+			sendAuthRequest(false, inputs)
+				.then((data) => localStorage.setItem('userId', data.id))
+				.then(() => {
+					dispatch(authActions.login());
+				})
 				.catch((error) => console.log(error));
 		}
 	};
@@ -96,7 +105,6 @@ const Auth = () => {
 					<Button
 						onClick={() => setIsSignup(!isSignup)}
 						sx={{ mt: 2, borderRadius: 10 }}
-						type='submit'
 						variant='outlined'
 					>
 						Change to {isSignup ? 'Login' : 'Signup'}
