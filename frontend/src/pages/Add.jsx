@@ -1,8 +1,11 @@
 import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { addPost } from '../api/api';
 
 const Add = () => {
+	const navigate = useNavigate();
+
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
@@ -18,10 +21,15 @@ const Add = () => {
 		}));
 	};
 
+	const onResReceived = (data) => {
+		console.log(data);
+		navigate('/diaries');
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		addPost(inputs)
-			.then((res) => console.log(res))
+			.then(onResReceived)
 			.catch((error) => console.log(error));
 	};
 

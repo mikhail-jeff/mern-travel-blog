@@ -2,12 +2,28 @@ import { Button, FormLabel, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { sendAuthRequest } from '../api/api';
 import { authActions } from '../store';
 
 const Auth = () => {
 	const dispatch = useDispatch();
+
+	const navigate = useNavigate();
+
 	const [isSignup, setIsSignup] = useState(false);
+
+	const onResReceived = (data) => {
+		if (isSignup) {
+			localStorage.setItem('userId', data.user._id);
+		} else {
+			localStorage.setItem('userId', data.id);
+		}
+
+		dispatch(authActions.login());
+		navigate('/diaries');
+	};
+
 	const [inputs, setInputs] = useState({
 		name: '',
 		email: '',
@@ -20,17 +36,11 @@ const Auth = () => {
 
 		if (isSignup) {
 			sendAuthRequest(true, inputs)
-				.then((data) => localStorage.setItem('userId', data.user._id))
-				.then(() => {
-					dispatch(authActions.login());
-				})
+				.then(onResReceived)
 				.catch((error) => console.log(error));
 		} else {
 			sendAuthRequest(false, inputs)
-				.then((data) => localStorage.setItem('userId', data.id))
-				.then(() => {
-					dispatch(authActions.login());
-				})
+				.then(onResReceived)
 				.catch((error) => console.log(error));
 		}
 	};

@@ -7,7 +7,7 @@ export const getAllPosts = async (req, res) => {
 	let posts;
 
 	try {
-		posts = await Post.find();
+		posts = await Post.find().populate('user');
 	} catch (error) {
 		console.log(error);
 	}

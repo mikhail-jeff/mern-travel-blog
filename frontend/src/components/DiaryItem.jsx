@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { deletePost } from '../api/api';
 
-const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+const DiaryItem = ({ title, description, image, location, date, id, user, name }) => {
 	const [open, setOpen] = useState(false);
 
 	const isLoggedInUser = () => {
@@ -32,9 +32,7 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
 					<Avatar
 						sx={{ bgcolor: 'red' }}
 						aria-label='recipe'
-					>
-						R
-					</Avatar>
+					></Avatar>
 				}
 				action={
 					<IconButton aria-label='settings'>

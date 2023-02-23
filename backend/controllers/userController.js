@@ -86,3 +86,22 @@ export const login = async (req, res, next) => {
 		message: 'Login Successful!',
 	});
 };
+
+// * GET USER BY ID
+export const getUserById = async (req, res) => {
+	const id = req.params.id;
+
+	let user;
+	try {
+		user = await User.findById(id).populate('posts');
+	} catch (error) {
+		return console.log(error);
+	}
+
+	if (!user) {
+		return res.status(404).json({
+			message: 'No User Found!',
+		});
+	}
+	return res.status(200).json({ user });
+};

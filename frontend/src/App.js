@@ -3,14 +3,24 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Diaries from './pages/Diaries';
 import Auth from './pages/Auth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Add from './pages/Add';
 import Profile from './pages/Profile';
 import Update from './pages/Update';
+import { useEffect } from 'react';
+import { authActions } from './store';
 
 function App() {
+	const dispatch = useDispatch();
+
 	const isLoggedIn = useSelector((state) => state.isLoggedIn);
 	console.log(isLoggedIn);
+
+	useEffect(() => {
+		if (localStorage.getItem('userId')) {
+			dispatch(authActions.login());
+		}
+	}, [dispatch]);
 
 	return (
 		<div>
@@ -32,18 +42,22 @@ function App() {
 						path='/auth'
 						element={<Auth />}
 					/>
-					<Route
-						path='/add'
-						element={<Add />}
-					/>
-					<Route
-						path='/profile'
-						element={<Profile />}
-					/>
-					<Route
-						path='/post/:id'
-						element={<Update />}
-					/>
+					{isLoggedIn && (
+						<>
+							<Route
+								path='/add'
+								element={<Add />}
+							/>
+							<Route
+								path='/profile'
+								element={<Profile />}
+							/>
+							<Route
+								path='/post/:id'
+								element={<Update />}
+							/>
+						</>
+					)}
 				</Routes>
 			</section>
 		</div>
